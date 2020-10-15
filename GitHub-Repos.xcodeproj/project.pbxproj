@@ -15,6 +15,7 @@
 		5306189425384A3400F65799 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5306189225384A3400F65799 /* LaunchScreen.storyboard */; };
 		5306189C25384F0600F65799 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306189B25384F0600F65799 /* Repository.swift */; };
 		5306189E2538540900F65799 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5306189D2538540900F65799 /* NetworkService.swift */; };
+		530618A12538CDDC00F65799 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530618A02538CDDC00F65799 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		5306189525384A3400F65799 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5306189B25384F0600F65799 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		5306189D2538540900F65799 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		530618A02538CDDC00F65799 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				5306188725384A2F00F65799 /* AppDelegate.swift */,
 				5306188925384A2F00F65799 /* SceneDelegate.swift */,
 				5306189B25384F0600F65799 /* Repository.swift */,
+				530618A02538CDDC00F65799 /* Constants.swift */,
 				5306188B25384A2F00F65799 /* ViewController.swift */,
 				5306189D2538540900F65799 /* NetworkService.swift */,
 				5306188D25384A2F00F65799 /* Main.storyboard */,
@@ -149,6 +152,7 @@
 				5306188825384A2F00F65799 /* AppDelegate.swift in Sources */,
 				5306188A25384A2F00F65799 /* SceneDelegate.swift in Sources */,
 				5306189C25384F0600F65799 /* Repository.swift in Sources */,
+				530618A12538CDDC00F65799 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

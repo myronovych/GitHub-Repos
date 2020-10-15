@@ -46,7 +46,7 @@ class ViewController: UIViewController {
             return
         }
         
-        NetworkService.shared.fetchRepos(name: name) { result in
+        NetworkService.shared.fetchRepos(url: URLs.baseUrl + "&q=\(name)+in%3Aname") { result in
             switch result {
             case .success(let repositories) :
                 self.repositories = repositories
@@ -87,6 +87,22 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate{
             UIApplication.shared.open(url)
             viewed.insert(repositories[indexPath.row].id)
             tableView.cellForRow(at: indexPath)?.backgroundColor = .gray
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == repositories.count {
+            NetworkService.shared.fetchNextPage { result in
+                switch result {
+                case .success(let repositories) :
+                    self.repositories += repositories
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                case .failure(let error):
+                    print("Error occured: \(error)")
+                }
+            }
         }
     }
 }
