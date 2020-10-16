@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 class SearchDataSourceDelegate: NSObject, UITableViewDataSource {
+    weak var vc: SearchVC?
+    
     var repositories = [Repository]()
     var viewed: Set<Int> {
         get { fetchVisitedIDs() }
@@ -54,7 +56,8 @@ extension SearchDataSourceDelegate: UITableViewDelegate {
         if let url = URL(string: htmlUrl) {
             UIApplication.shared.open(url)
             viewed.insert(repositories[indexPath.row].id)
-            tableView.cellForRow(at: indexPath)?.backgroundColor = .gray
+            let repo = repositories[indexPath.row]
+            tableView.cellForRow(at: indexPath)?.textLabel?.text = "🔴 \(repo.fullName)"
         }
     }
     
@@ -69,6 +72,11 @@ extension SearchDataSourceDelegate: UITableViewDelegate {
                         tableView.reloadData()
                     }
                 case .failure(let error):
+                    if error == .limitReached {
+                        DispatchQueue.main.async {
+                            self.vc?.showLimitAlert()
+                        }
+                    }
                     print("Error occured: \(error)")
                 }
             }

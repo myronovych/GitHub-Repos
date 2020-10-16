@@ -23,8 +23,14 @@ class SearchVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.currentDataSource = SearchDataSourceDelegate()
-        
+        currentDataSource?.vc = self
         searchField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+    }
+    
+    func showLimitAlert() {
+        let ac = UIAlertController(title: "Limit reached", message: "API Rate Limit Exceeded. You need to wait.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(ac, animated: true)
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -44,6 +50,11 @@ class SearchVC: UIViewController {
                     self.tableView.reloadData()
                 }
             case .failure(let error):
+                if error == .limitReached {
+                    DispatchQueue.main.async {
+                        self.showLimitAlert()
+                    }
+                }
                 print("Error occured: \(error)")
             }
         }

@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 enum NetworkError: Error {
-    case invalidURL, invalidData, unableToPerformRequest, badResponse
+    case invalidURL, invalidData, unableToPerformRequest, badResponse, limitReached
 }
 
 typealias SearchRepositoriesResponse = Result<(repositories: [Repository], nextURL: URL?), NetworkError>
@@ -41,9 +41,16 @@ class GitHubApi {
                 return
             }
             
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            guard let response = response as? HTTPURLResponse else {
                 completion(.failure(.badResponse))
                 return
+            }
+            
+            if response.statusCode != 200 {
+                if response.statusCode == 403 {
+                    completion(.failure(.limitReached))
+                    return
+                }
             }
                         
             if let links = response.allHeaderFields["Link"] as? String {
