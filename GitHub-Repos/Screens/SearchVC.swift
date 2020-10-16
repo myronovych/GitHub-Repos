@@ -45,9 +45,9 @@ class SearchVC: UIViewController {
             guard let self = self else { return }
             switch result {
             case .success(let repoResult) :
-                guard repoResult.searchQuery == URLs.baseUrl+"&q=\(textField.text ?? "" )+in%3Aname" else { return }
-                self.currentDataSource?.repositories = repoResult.repositories
                 DispatchQueue.main.async {
+                    guard repoResult.searchQuery == URLs.baseUrl+"&q=\(textField.text ?? "" )+in%3Aname" else { return }
+                    self.currentDataSource?.repositories = repoResult.repositories
                     self.tableView.reloadData()
                 }
             case .failure(let error):
