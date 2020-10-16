@@ -1,5 +1,5 @@
 //
-//  NetworkService.swift
+//  GitHubApi.swift
 //  GitHub-Repos
 //
 //  Created by rs on 15.10.2020.
@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 enum NetworkError: Error {
     case invalidURL, invalidData, unableToPerformRequest, badResponse
@@ -14,12 +15,10 @@ enum NetworkError: Error {
 
 typealias SearchRepositoriesResponse = Result<(repositories: [Repository], nextURL: URL?), NetworkError>
 
-class NetworkService {
-    static let shared = NetworkService()
+class GitHubApi {
+    static let shared = GitHubApi()
     private init() {}
-    
-    let baseUrl = "https://api.github.com/search/repositories?sort=stars"
-    
+        
     var nextUrl: String?
     
     func fetchNextPage(completion: @escaping (Result<[Repository],NetworkError>) -> Void) {
@@ -29,8 +28,6 @@ class NetworkService {
         }
     }
     
-    
-    
     func fetchRepos(url: String, completion: @escaping (Result<[Repository],NetworkError>) -> Void) {
         
         guard let url = URL(string: url) else {
@@ -38,9 +35,7 @@ class NetworkService {
             return
         }
         
-        let session = URLSession.shared
-        
-        let task = session.dataTask(with: url) {data, response, error in
+        let task = URLSession.shared.dataTask(with: url) {data, response, error in
             if let _ = error {
                 completion(.failure(.unableToPerformRequest))
                 return
@@ -50,12 +45,10 @@ class NetworkService {
                 completion(.failure(.badResponse))
                 return
             }
-            
-            print(response.allHeaderFields)
-            
+                        
             if let links = response.allHeaderFields["Link"] as? String {
                 do {
-                    let links = try NetworkService.parseLinks(links)
+                    let links = try Parser().parseLinks(links)
                     self.nextUrl = links["next"]
                 } catch {
                     print(error)
@@ -77,33 +70,6 @@ class NetworkService {
                 completion(.failure(.invalidData))
             }
         }
-        
         task.resume()
-    }
-    
-    private static let parseLinksPattern = "\\s*,?\\s*<([^\\>]*)>\\s*;\\s*rel=\"([^\"]*)\""
-    private static let linksRegex = try! NSRegularExpression(pattern: parseLinksPattern, options: [.allowCommentsAndWhitespace])
-
-    private static func parseLinks(_ links: String) throws -> [String: String] {
-
-        let length = (links as NSString).length
-        let matches = NetworkService.linksRegex.matches(in: links, options: NSRegularExpression.MatchingOptions(), range: NSRange(location: 0, length: length))
-
-        var result: [String: String] = [:]
-
-        for m in matches {
-            let matches = (1 ..< m.numberOfRanges).map { rangeIndex -> String in
-                let range = m.range(at: rangeIndex)
-                let startIndex = links.index(links.startIndex, offsetBy: range.location)
-                let endIndex = links.index(links.startIndex, offsetBy: range.location + range.length)
-                return String(links[startIndex ..< endIndex])
-            }
-            if matches.count != 2 {
-                throw NetworkError.invalidData
-            }
-            result[matches[1]] = matches[0]
-        }
-        
-        return result
     }
 }

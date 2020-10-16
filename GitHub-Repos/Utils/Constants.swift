@@ -9,5 +9,5 @@
 import Foundation
 
 enum URLs {
-static let baseUrl = "https://api.github.com/search/repositories?sort=stars"
+    static let baseUrl = "https://api.github.com/search/repositories?sort=stars"
 }
