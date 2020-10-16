@@ -12,6 +12,11 @@ struct RepositoryResponse: Decodable {
     let items: [Repository]
 }
 
+struct RepositoryResult {
+    let searchQuery: String
+    let repositories: [Repository]
+}
+
 struct Repository: Decodable {
     let id: Int
     let fullName: String

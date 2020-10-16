@@ -66,8 +66,8 @@ extension SearchDataSourceDelegate: UITableViewDelegate {
             GitHubApi.shared.fetchNextPage { [weak self] result in
                 guard let self = self else { return }
                 switch result {
-                case .success(let repositories) :
-                    self.repositories += repositories
+                case .success(let repoResult) :
+                    self.repositories = repoResult.repositories
                     DispatchQueue.main.async {
                         tableView.reloadData()
                     }

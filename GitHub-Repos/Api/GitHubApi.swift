@@ -21,16 +21,16 @@ class GitHubApi {
         
     var nextUrl: String?
     
-    func fetchNextPage(completion: @escaping (Result<[Repository],NetworkError>) -> Void) {
+    func fetchNextPage(completion: @escaping (Result<RepositoryResult,NetworkError>) -> Void) {
         if let nextUrl = nextUrl {
             print("FETCHING NEXT URL: \(nextUrl)")
-            fetchRepos(url: nextUrl, completion: completion)
+            fetchRepos(urlString: nextUrl, completion: completion)
         }
     }
     
-    func fetchRepos(url: String, completion: @escaping (Result<[Repository],NetworkError>) -> Void) {
+    func fetchRepos(urlString: String, completion: @escaping (Result<RepositoryResult,NetworkError>) -> Void) {
         
-        guard let url = URL(string: url) else {
+        guard let url = URL(string: urlString) else {
             completion(.failure(.invalidURL))
             return
         }
@@ -72,7 +72,8 @@ class GitHubApi {
             do {
                 let decoder = JSONDecoder()
                 let repositories = try decoder.decode(RepositoryResponse.self, from: data).items
-                completion(.success(repositories))
+                let repoResult = RepositoryResult(searchQuery: urlString, repositories: repositories)
+                completion(.success(repoResult))
             } catch {
                 completion(.failure(.invalidData))
             }

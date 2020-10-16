@@ -41,11 +41,12 @@ class SearchVC: UIViewController {
             return
         }
         
-        GitHubApi.shared.fetchRepos(url: URLs.baseUrl + "&q=\(name)+in%3Aname") { [weak self] result in
+        GitHubApi.shared.fetchRepos(urlString: URLs.baseUrl + "&q=\(name)+in%3Aname") { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success(let repositories) :
-                self.currentDataSource?.repositories = repositories
+            case .success(let repoResult) :
+                guard repoResult.searchQuery == URLs.baseUrl+"&q=\(textField.text ?? "" )+in%3Aname" else { return }
+                self.currentDataSource?.repositories = repoResult.repositories
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
