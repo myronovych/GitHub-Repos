@@ -61,7 +61,8 @@ extension SearchDataSourceDelegate: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == repositories.count {
-            GitHubApi.shared.fetchNextPage { result in
+            GitHubApi.shared.fetchNextPage { [weak self] result in
+                guard let self = self else { return }
                 switch result {
                 case .success(let repositories) :
                     self.repositories += repositories

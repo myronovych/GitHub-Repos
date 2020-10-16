@@ -36,11 +36,12 @@ class SearchVC: UIViewController {
         }
         
         GitHubApi.shared.fetchRepos(url: URLs.baseUrl + "&q=\(name)+in%3Aname") { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let repositories) :
-                self?.currentDataSource?.repositories = repositories
+                self.currentDataSource?.repositories = repositories
                 DispatchQueue.main.async {
-                    self?.tableView.reloadData()
+                    self.tableView.reloadData()
                 }
             case .failure(let error):
                 print("Error occured: \(error)")
