@@ -14,7 +14,7 @@ struct RepositoryResponse: Decodable {
 
 struct Repository: Decodable {
     let id: Int
-    let fullName: String?
+    let fullName: String
     let stargazersCount: Int
     let htmlUrl: String
     

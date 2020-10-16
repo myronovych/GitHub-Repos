@@ -31,14 +31,13 @@ class SearchDataSourceDelegate: NSObject, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RepoCell", for: indexPath)
         let repo = repositories[indexPath.row]
         
-        cell.textLabel?.text = repo.fullName
-        cell.detailTextLabel?.text = String(repo.stargazersCount)
+        cell.detailTextLabel?.text = "⭐️ \(repo.stargazersCount)"
         cell.selectionStyle = .none
         
         if viewed.contains(repo.id) {
-            cell.backgroundColor = .gray
+            cell.textLabel?.text = "🔴 \(repo.fullName)"
         } else {
-            cell.backgroundColor = .white
+            cell.textLabel?.text = "🟢 \(repo.fullName)"
         }
         
         return cell
